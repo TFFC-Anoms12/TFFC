@@ -4,6 +4,7 @@ The repo for all things Zen Tab folders for the TFFC (Tab Folder Fan Club)
 ## To-Do
 * Custom Tab Folder Icons
 * Auto Updating of the [Advanced Tab Groups](https://github.com/TFFC-Anoms12/Advanced-Tab-Groups) script
+* Tab Group d&d
 * Nesting...
 * Pinning Tab Folders
 
