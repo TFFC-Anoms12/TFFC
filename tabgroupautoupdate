@@ -1,0 +1,44 @@
+// User-defined target file path – adjust as needed.
+var TARGET_FILE = "Path to tabgroups.css + proper JS syntax";
+// URL for the raw CSS file from GitHub.
+var CSS_URL = "https://raw.githubusercontent.com/TFFC-Anoms12/Advanced-Tab-Groups/main/tabgroups.css";
+
+// Function to generate a unique import number (e.g., timestamp)
+function generateImportNumber() {
+  return new Date().getTime();
+}
+
+// Fetch the CSS content.
+var req = new XMLHttpRequest();
+req.open("GET", CSS_URL, true);
+req.onreadystatechange = function() {
+  if (req.readyState === 4 && req.status === 200) {
+    var cssData = req.responseText;
+    var importNumber = generateImportNumber();
+    cssData += "\n/* Import Number: " + importNumber + " */";
+
+    try {
+      // Create a file instance for the target.
+      var file = Components.classes["@mozilla.org/file/local;1"]
+                .createInstance(Components.interfaces.nsIFile);
+      file.initWithPath(TARGET_FILE);
+      
+      // Prepare a file output stream with write permissions.
+      var foStream = Components.classes["@mozilla.org/network/file-output-stream;1"]
+                        .createInstance(Components.interfaces.nsIFileOutputStream);
+      // 0x02: write-only, 0x08: create file if it doesn't exist, 0x20: truncate file
+      foStream.init(file, 0x02 | 0x08 | 0x20, 0o666, 0);
+      
+      // Write the CSS data to the file.
+      foStream.write(cssData, cssData.length);
+      foStream.close();
+      
+      // Log success and the path of the updated file.
+      console.log("CSS updated successfully at: " + TARGET_FILE);
+    } catch(e) {
+      // Report any errors that occur.
+      Components.utils.reportError("Error writing CSS: " + e);
+    }
+  }
+};
+req.send(null);
